@@ -1,3 +1,4 @@
+// lib/app/modules/home/views/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,9 @@ import '../../../components/my_widgets_animator.dart';
 import '../controllers/home_controller.dart';
 import 'widgets/home_shimmer.dart';
 import 'widgets/weather_card.dart';
+import 'widgets/app_title_component.dart';  // Import the app title component
+import 'widgets/your_notification_component.dart';  // Import the notification component
+import 'widgets/calendar_component.dart';  // Import the calendar component
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -34,6 +38,9 @@ class HomeView extends GetView<HomeController> {
               ),
               successWidget: () => ListView(
                 children: [
+                  20.verticalSpace,
+                  // Add the App Title component first
+                  AppTitleComponent(),
                   20.verticalSpace,
                   Row(
                     children: [
@@ -60,8 +67,8 @@ class HomeView extends GetView<HomeController> {
                           id: controller.themeId,
                           builder: (_) => Icon(
                             controller.isLightTheme
-                              ? Icons.dark_mode_outlined
-                              : Icons.light_mode_outlined,
+                                ? Icons.dark_mode_outlined
+                                : Icons.light_mode_outlined,
                             color: theme.iconTheme.color,
                           ),
                         ),
@@ -83,6 +90,9 @@ class HomeView extends GetView<HomeController> {
                     begin: -1,
                     curve: Curves.easeInSine,
                   ),
+                  20.verticalSpace,
+                  // Add the Notification component second
+                  YourNotificationComponent(),
                   24.verticalSpace,
                   SizedBox(
                     height: 170.h,
@@ -103,6 +113,8 @@ class HomeView extends GetView<HomeController> {
                       curve: Curves.easeInSine,
                     ),
                   ),
+                  24.verticalSpace,
+                  CalendarComponent(),
                   16.verticalSpace,
                   GetBuilder<HomeController>(
                     id: controller.dotIndicatorsId,

@@ -15,7 +15,7 @@ class Current {
   double pressureIn;
   double precipMm;
   double precipIn;
-  int humidity;
+  int humidity;  // Humidity field
   int cloud;
   double feelslikeC;
   double feelslikeF;
@@ -40,7 +40,7 @@ class Current {
     required this.pressureIn,
     required this.precipMm,
     required this.precipIn,
-    required this.humidity,
+    required this.humidity,  // Include humidity in the constructor
     required this.cloud,
     required this.feelslikeC,
     required this.feelslikeF,
@@ -54,27 +54,27 @@ class Current {
   factory Current.fromJson(Map<String, dynamic> json) => Current(
     lastUpdatedEpoch: json['last_updated_epoch'],
     lastUpdated: json['last_updated'],
-    tempC: json['temp_c']?.toDouble(),
-    tempF: json['temp_f']?.toDouble(),
+    tempC: (json['temp_c'] ?? 0).toDouble(),
+    tempF: (json['temp_f'] ?? 0).toDouble(),
     isDay: json['is_day'],
     condition: Condition.fromJson(json['condition']),
-    windMph: json['wind_mph']?.toDouble(),
-    windKph: json['wind_kph'],
+    windMph: (json['wind_mph'] ?? 0).toDouble(),
+    windKph: (json['wind_kph'] ?? 0).toDouble(),
     windDegree: json['wind_degree'],
     windDir: json['wind_dir'],
     pressureMb: json['pressure_mb'],
-    pressureIn: json['pressure_in']?.toDouble(),
-    precipMm: json['precip_mm'],
-    precipIn: json['precip_in'],
-    humidity: json['humidity'],
+    pressureIn: (json['pressure_in'] ?? 0).toDouble(),
+    precipMm: (json['precip_mm'] ?? 0).toDouble(),
+    precipIn: (json['precip_in'] ?? 0).toDouble(),
+    humidity: json['humidity'],  // Humidity is parsed from the JSON
     cloud: json['cloud'],
-    feelslikeC: json['feelslike_c']?.toDouble(),
-    feelslikeF: json['feelslike_f']?.toDouble(),
-    visKm: json['vis_km'],
-    visMiles: json['vis_miles'],
-    uv: json['uv'],
-    gustMph: json['gust_mph']?.toDouble(),
-    gustKph: json['gust_kph'],
+    feelslikeC: (json['feelslike_c'] ?? 0).toDouble(),
+    feelslikeF: (json['feelslike_f'] ?? 0).toDouble(),
+    visKm: (json['vis_km'] ?? 0).toDouble(),
+    visMiles: (json['vis_miles'] ?? 0).toDouble(),
+    uv: (json['uv'] ?? 0).toDouble(),
+    gustMph: (json['gust_mph'] ?? 0).toDouble(),
+    gustKph: (json['gust_kph'] ?? 0).toDouble(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -92,7 +92,7 @@ class Current {
     'pressure_in': pressureIn,
     'precip_mm': precipMm,
     'precip_in': precipIn,
-    'humidity': humidity,
+    'humidity': humidity,  // Include humidity in the JSON output
     'cloud': cloud,
     'feelslike_c': feelslikeC,
     'feelslike_f': feelslikeF,

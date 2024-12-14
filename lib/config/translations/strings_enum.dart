@@ -19,8 +19,8 @@ class Strings {
   static const String alreadyHaveAnAccount = 'alreadyHaveAnAccount';
   static const String login = 'login';
 
-  static const String helloAbdQader = 'helloAbdQader';
-  static const String discoverTheWeather = 'discoverTheWeather';
+  static const String helloAbdQader = 'HelloGeorge';
+  static const String discoverTheWeather = 'WhatsForYouToday';
   static const String aroundTheWorld = 'aroundTheWorld';
 
   static const String weatherNow = 'weatherNow';

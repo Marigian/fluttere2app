@@ -18,7 +18,7 @@ dependencies:
   http_mock_adapter: # mocking dio for testing
   pretty_dio_logger: # for dio API logging and debugging
   shared_preferences: # shared preferences persistence key-value store
-  location: # for location services
+  location: ^5.0.0 # for location services
   flutter_launcher_icons: # change the app icon
   flutter_svg: # for SVG icons
   smooth_page_indicator: # for onboarding screen
@@ -30,6 +30,7 @@ dependencies:
   step_progress_indicator: # for progress indicator
   lottie: # for Adobe After Effects animations
   flutter_animate: # for animation
+  table_calendar: ^3.0.0
 
 dev_dependencies:
   flutter_test:

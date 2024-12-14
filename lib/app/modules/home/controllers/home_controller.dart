@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../../../../config/theme/my_theme.dart';
 import '../../../../config/translations/localization_service.dart';
 import '../../../../utils/constants.dart';
@@ -19,7 +18,7 @@ class HomeController extends GetxController {
   // hold current weather data
   late WeatherModel currentWeather;
 
-  // hold the weather arround the world
+  // hold the weather around the world
   List<WeatherModel> weatherArroundTheWorld = [];
 
   // for update
@@ -31,9 +30,12 @@ class HomeController extends GetxController {
 
   // for app theme
   var isLightTheme = MySharedPref.getThemeIsLight();
-  
+
   // for weather slider and dot indicator
   var activeIndex = 1;
+
+  // Observable for the notification message
+  var notificationMessage = ''.obs;
 
   @override
   void onInit() async {
@@ -45,15 +47,15 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  /// get the user location
+  /// Get the user location
   getUserLocation() async {
     var locationData = await LocationService().getUserLocation();
     if (locationData != null) {
       await getCurrentWeather('${locationData.latitude},${locationData.longitude}');
     }
   }
-  
-  /// get home screem data (sliders, brands, and cars)
+
+  /// Get current weather data
   getCurrentWeather(String location) async {
     await BaseClient.safeApiCall(
       Constants.currentWeatherApiUrl,
@@ -67,17 +69,19 @@ class HomeController extends GetxController {
         currentWeather = WeatherModel.fromJson(response.data);
         await getWeatherArroundTheWorld();
         apiCallStatus = ApiCallStatus.success;
+        showNotification('Weather data fetched successfully!');
         update();
       },
       onError: (error) {
         BaseClient.handleApiError(error);
         apiCallStatus = ApiCallStatus.error;
+        showNotification('Failed to fetch weather data!');
         update();
       },
     );
   }
 
-  /// get weather arround the world
+  /// Get weather around the world
   getWeatherArroundTheWorld() async {
     weatherArroundTheWorld.clear();
     final cities = ['London', 'Cairo', 'Alaska'];
@@ -99,20 +103,29 @@ class HomeController extends GetxController {
     });
   }
 
-  /// when the user slide the weather card
+  /// Show notification with a custom message
+  void showNotification(String message) {
+    notificationMessage.value = message;
+    // Optionally, hide the notification after 3 seconds
+    Future.delayed(Duration(seconds: 3), () {
+      notificationMessage.value = 'Attention! High temperatures will occur during the day, it is suggested you avoid sun during 12:00 - 16:00! Prepare the watering during early hours. '; // Clear the notification after 3 seconds
+    });
+  }
+
+  /// When the user slides the weather card
   onCardSlided(index, reason) {
     activeIndex = index;
     update([dotIndicatorsId]);
   }
 
-  /// when the user press on change theme icon
+  /// When the user presses on change theme icon
   onChangeThemePressed() {
     MyTheme.changeTheme();
     isLightTheme = MySharedPref.getThemeIsLight();
     update([themeId]);
   }
-  
-  /// when the user press on change language icon
+
+  /// When the user presses on change language icon
   onChangeLanguagePressed() async {
     currentLanguage = currentLanguage == 'ar' ? 'en' : 'ar';
     await LocalizationService.updateLanguage(currentLanguage);

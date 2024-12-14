@@ -14,6 +14,7 @@ class LocationService {
   late PermissionStatus _permissionGranted;
   LocationData? _locationData;
 
+
   late bool _serviceEnabled;
 
   Future<bool> hasLocationPermission() async {

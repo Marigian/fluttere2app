@@ -81,6 +81,12 @@ class WeatherCard extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                Text(
+                  'Humidity: ${weather.current.humidity}%',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ).animate().slideX(
               duration: 200.ms, begin: 1, curve: Curves.easeInSine,
