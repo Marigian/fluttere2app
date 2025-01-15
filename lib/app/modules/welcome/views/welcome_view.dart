@@ -67,7 +67,7 @@ class WelcomeView extends GetView<WelcomeController> {
                   ),
                   const Spacer(),
                   CustomButton(
-                    onPressed: () => Get.toNamed(Routes.HOME),
+                    onPressed: () => Get.toNamed(Routes.HOME),  // Navigate to the login screen
                     text: Strings.getStarted.tr,
                     fontSize: 18.sp,
                     backgroundColor: theme.primaryColor,
@@ -81,25 +81,31 @@ class WelcomeView extends GetView<WelcomeController> {
                     curve: Curves.easeInSine,
                   ),
                   20.verticalSpace,
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Strings.alreadyHaveAnAccount.tr,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        TextSpan(
-                          text: Strings.login.tr,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.primaryColor,
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the Login screen when "Login" word is tapped
+                      Get.toNamed(Routes.LOGIN);
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Strings.alreadyHaveAnAccount.tr,
+                            style: theme.textTheme.bodyMedium,
                           ),
-                        ),
-                      ]
+                          TextSpan(
+                            text: Strings.login.tr,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.primaryColor,  // Style for the "Login" text (link-like style)
+                            ),
+                          ),
+                        ],
+                      ),
+                    ).animate(delay: 300.ms).fade().slideY(
+                      duration: 300.ms,
+                      begin: 1,
+                      curve: Curves.easeInSine,
                     ),
-                  ).animate(delay: 300.ms).fade().slideY(
-                    duration: 300.ms,
-                    begin: 1,
-                    curve: Curves.easeInSine,
                   ),
                 ],
               ),

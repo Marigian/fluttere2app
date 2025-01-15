@@ -8,6 +8,8 @@ import '../modules/weather/bindings/home_binding.dart';
 import '../modules/weather/views/weather_view.dart';
 import '../modules/welcome/bindings/welcome_binding.dart';
 import '../modules/welcome/views/welcome_view.dart';
+import '../modules/login/bindings/login_binding.dart';  // Import LoginBinding
+import '../modules/login/views/login_view.dart';  // Import LoginView
 
 part 'app_routes.dart';
 
@@ -38,6 +40,11 @@ class AppPages {
       binding: WeatherBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 250),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,  // Add LOGIN route
+      page: () => const LoginView(),
+      binding: LoginBinding(),  // Bind LoginController
     ),
   ];
 }
