@@ -8,8 +8,11 @@ import '../modules/weather/bindings/home_binding.dart';
 import '../modules/weather/views/weather_view.dart';
 import '../modules/welcome/bindings/welcome_binding.dart';
 import '../modules/welcome/views/welcome_view.dart';
-import '../modules/login/bindings/login_binding.dart';  // Import LoginBinding
-import '../modules/login/views/login_view.dart';  // Import LoginView
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
+import '../modules/signup/views/signup_view.dart';
+import '../modules/signup/bindings/signup_binding.dart';
+
 
 part 'app_routes.dart';
 
@@ -46,5 +49,10 @@ class AppPages {
       page: () => const LoginView(),
       binding: LoginBinding(),  // Bind LoginController
     ),
+    GetPage(
+      name: _Paths.SIGNUP,  // Add LOGIN route
+      page: () => const SignUpView(),
+      binding: SignUpBinding(),  // Bind LoginController
+    )
   ];
 }

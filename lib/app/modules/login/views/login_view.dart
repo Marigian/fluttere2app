@@ -72,7 +72,7 @@ class LoginView extends GetView<LoginController> {
             TextButton(
               onPressed: () {
                 // Navigate to the Sign-Up screen
-                Get.toNamed('/signup');  // Use /signup to navigate to the Sign-Up screen
+                Get.toNamed('/signup');
               },
               child: const Text('Don\'t have an account? Sign Up'),
             ),
