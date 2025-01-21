@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../controllers/signup_controller.dart';  // Import the SignUpController
+import '../controllers/signup_controller.dart'; // Import the SignUpController
 
 class SignUpView extends GetView<SignUpController> {
   const SignUpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;  // Get the current theme (this allows us to use the same primary color)
+    final theme = context.theme; // Get the current theme (this allows us to use the same primary color)
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sign Up',  // App name as the title for sign-up
+          'Sign Up', // App name as the title for sign-up
           style: TextStyle(
-            fontFamily: 'Comic Sans MS',  // Specify the system font (Comic Sans MS or another installed font)
-            fontSize: 30.sp,  // Bigger font size
-            fontWeight: FontWeight.bold,  // Bold style
-            color: Colors.purple,  // Purple color
+            fontFamily: 'Comic Sans MS', // Specify the system font (Comic Sans MS or another installed font)
+            fontSize: 30.sp, // Bigger font size
+            fontWeight: FontWeight.bold, // Bold style
+            color: Colors.purple, // Purple color
           ),
         ),
         centerTitle: true,
@@ -34,7 +34,7 @@ class SignUpView extends GetView<SignUpController> {
               controller: controller.usernameController,
               decoration: InputDecoration(
                 labelText: 'Username (Email)',
-                prefixIcon: const Icon(Icons.person),  // People icon before username
+                prefixIcon: const Icon(Icons.person), // People icon before username
                 border: OutlineInputBorder(),
               ),
             ),
@@ -46,28 +46,29 @@ class SignUpView extends GetView<SignUpController> {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock),  // Key icon before password
+                prefixIcon: const Icon(Icons.lock), // Key icon before password
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
 
-            // Age Dropdown (Fixing overflow)
+            // Age and Gender Dropdowns in a Row
             Row(
               children: [
+                // Age Dropdown
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                       labelText: 'Age',
-                      isDense: true,  // Makes the dropdown more compact
-                      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),  // Reduce padding inside the dropdown
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                       border: OutlineInputBorder(),
                     ),
                     value: controller.selectedAge.value,
                     onChanged: (newValue) {
                       controller.selectedAge.value = newValue!;
                     },
-                    hint: Text('Select Age', style: theme.textTheme.bodySmall),  // Smaller text size for hint
+                    hint: Text('Select Age', style: theme.textTheme.bodySmall),
                     items: [
                       'Under 18',
                       '18-35',
@@ -75,16 +76,15 @@ class SignUpView extends GetView<SignUpController> {
                     ]
                         .map((age) => DropdownMenuItem<String>(
                       value: age,
-                      child: Text(age, style: theme.textTheme.bodySmall),  // Smaller text size for items
+                      child: Text(age, style: theme.textTheme.bodySmall),
                     ))
                         .toList(),
                   ),
                 ),
-                SizedBox(width: 20.w),  // Spacer
+                SizedBox(width: 20.w), // Spacer
 
                 // Gender Dropdown
-                Container(
-                  width: 150.w,  // Set a fixed width for the dropdown to avoid overflow
+                Expanded(
                   child: DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                       labelText: 'Gender',
@@ -109,34 +109,32 @@ class SignUpView extends GetView<SignUpController> {
                         .toList(),
                   ),
                 ),
-                SizedBox(width: 20.w),  // Spacer
-
-                // Role Dropdown (Fixing overflow)
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Role',
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                      border: OutlineInputBorder(),
-                    ),
-                    value: controller.selectedRole.value,
-                    onChanged: (newValue) {
-                      controller.selectedRole.value = newValue!;
-                    },
-                    hint: Text('Select Role', style: theme.textTheme.bodySmall),
-                    items: [
-                      'Manager',
-                      'Worker',
-                    ]
-                        .map((role) => DropdownMenuItem<String>(
-                      value: role,
-                      child: Text(role, style: theme.textTheme.bodySmall),
-                    ))
-                        .toList(),
-                  ),
-                ),
               ],
+            ),
+            const SizedBox(height: 20),
+
+            // Role Dropdown
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Role',
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                border: OutlineInputBorder(),
+              ),
+              value: controller.selectedRole.value,
+              onChanged: (newValue) {
+                controller.selectedRole.value = newValue!;
+              },
+              hint: Text('Select Role', style: theme.textTheme.bodySmall),
+              items: [
+                'Manager',
+                'Worker',
+              ]
+                  .map((role) => DropdownMenuItem<String>(
+                value: role,
+                child: Text(role, style: theme.textTheme.bodySmall),
+              ))
+                  .toList(),
             ),
             const SizedBox(height: 20),
 
@@ -226,14 +224,14 @@ class SignUpView extends GetView<SignUpController> {
                   },
                   child: const Text('Delete All'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor,  // Same color as "Get Started" button
+                    backgroundColor: theme.primaryColor, // Same color as "Get Started" button
                     padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),  // Rounded corners
+                      borderRadius: BorderRadius.circular(30), // Rounded corners
                     ),
                   ),
                 ),
-                SizedBox(width: 20.w),  // Spacer
+                SizedBox(width: 20.w), // Spacer
                 ElevatedButton(
                   onPressed: controller.signUp,
                   child: const Text(
@@ -241,7 +239,7 @@ class SignUpView extends GetView<SignUpController> {
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor,  // Same color as "Get Started"
+                    backgroundColor: theme.primaryColor, // Same color as "Get Started"
                     padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),

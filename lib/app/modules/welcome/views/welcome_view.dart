@@ -134,3 +134,7 @@ class WelcomeView extends GetView<WelcomeController> {
     );
   }
 }
+
+
+
+
