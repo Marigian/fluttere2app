@@ -31,6 +31,7 @@ dependencies:
   lottie: # for Adobe After Effects animations
   flutter_animate: # for animation
   table_calendar: ^3.0.0
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:

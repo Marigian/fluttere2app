@@ -22,6 +22,24 @@ class WelcomeView extends GetView<WelcomeController> {
           Positioned.fill(
             child: Image.asset(Constants.welcome, fit: BoxFit.fill),
           ),
+          // Adding "Helping Hand" label
+          Positioned(
+            top: 50.h,
+            left: 20.w,
+            right: 20.w,
+            child: Text(
+              'Helping Hand', // The label text
+              style: theme.textTheme.headlineMedium?.copyWith(
+                color: Colors.white, // Adjust the color
+                fontWeight: FontWeight.bold, // Adjust the font weight
+              ),
+              textAlign: TextAlign.center,
+            ).animate().fade().slideY(
+              duration: 300.ms,
+              begin: -1,
+              curve: Curves.easeInSine,
+            ),
+          ),
           Positioned(
             bottom: 20.h,
             left: 20.w,
