@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../controllers/signup_controller.dart'; // Import the SignUpController
+import 'package:logger/logger.dart'; // Import Logger package
+import '../controllers/signup_controller.dart';
 
 class SignUpView extends GetView<SignUpController> {
   const SignUpView({Key? key}) : super(key: key);
 
+  // Initialize the logger
+  static final Logger logger = Logger();
+
+  // Function to check password strength
+  String _checkPasswordStrength(String password) {
+    if (password.length < 6) {
+      return "Too short";
+    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$').hasMatch(password)) {
+      return "Weak (Use uppercase, numbers, and symbols)";
+    }
+    return "Strong";
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme; // Get the current theme (this allows us to use the same primary color)
+    final theme = context.theme;
+    final RxString passwordStrength = "".obs; // Observable for password strength tracking
+
+    logger.i("SignUpView: Widget build called."); // Log when the widget builds
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sign Up', // App name as the title for sign-up
+          'Sign Up',
           style: TextStyle(
-            fontFamily: 'Comic Sans MS', // Specify the system font (Comic Sans MS or another installed font)
-            fontSize: 30.sp, // Bigger font size
-            fontWeight: FontWeight.bold, // Bold style
-            color: Colors.purple, // Purple color
+            fontFamily: 'Comic Sans MS',
+            fontSize: 30.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.purple,
           ),
         ),
         centerTitle: true,
@@ -29,30 +46,60 @@ class SignUpView extends GetView<SignUpController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Username (Email) TextField with People Icon
+            // Username (Email) TextField
             TextField(
               controller: controller.usernameController,
               decoration: InputDecoration(
                 labelText: 'Username (Email)',
-                prefixIcon: const Icon(Icons.person), // People icon before username
+                prefixIcon: const Icon(Icons.person),
                 border: OutlineInputBorder(),
               ),
+              onChanged: (value) {
+                logger.d("Username changed: $value");
+
+                // Log duplicate email notification
+                if (value.trim().toLowerCase() == "test@example.com") {
+                  logger.e("The email already exists");
+                }
+              },
             ),
             const SizedBox(height: 20),
 
-            // Password TextField with Key Icon
-            TextField(
-              controller: controller.passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock), // Key icon before password
-                border: OutlineInputBorder(),
-              ),
-            ),
+            // Password TextField with Strength Validation
+            Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: controller.passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    passwordStrength.value = _checkPasswordStrength(value);
+                    logger.d("Password updated. Strength: ${passwordStrength.value}");
+
+                    if (passwordStrength.value == "Too short" || passwordStrength.value == "Weak (Use uppercase, numbers, and symbols)") {
+                      logger.w("Weak password entered: $value");
+                    }
+                  },
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "Password Strength: ${passwordStrength.value}",
+                  style: TextStyle(
+                    color: passwordStrength.value == "Strong"
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+              ],
+            )),
             const SizedBox(height: 20),
 
-            // Age and Gender Dropdowns in a Row
+            // Age and Gender Dropdowns
             Row(
               children: [
                 // Age Dropdown
@@ -66,14 +113,11 @@ class SignUpView extends GetView<SignUpController> {
                     ),
                     value: controller.selectedAge.value,
                     onChanged: (newValue) {
+                      logger.d("Age selected: $newValue");
                       controller.selectedAge.value = newValue!;
                     },
                     hint: Text('Select Age', style: theme.textTheme.bodySmall),
-                    items: [
-                      'Under 18',
-                      '18-35',
-                      '35+',
-                    ]
+                    items: ['Under 18', '18-35', '35+']
                         .map((age) => DropdownMenuItem<String>(
                       value: age,
                       child: Text(age, style: theme.textTheme.bodySmall),
@@ -81,7 +125,7 @@ class SignUpView extends GetView<SignUpController> {
                         .toList(),
                   ),
                 ),
-                SizedBox(width: 20.w), // Spacer
+                SizedBox(width: 20.w),
 
                 // Gender Dropdown
                 Expanded(
@@ -94,14 +138,11 @@ class SignUpView extends GetView<SignUpController> {
                     ),
                     value: controller.selectedGender.value,
                     onChanged: (newValue) {
+                      logger.d("Gender selected: $newValue");
                       controller.selectedGender.value = newValue!;
                     },
                     hint: Text('Select Gender', style: theme.textTheme.bodySmall),
-                    items: [
-                      'Male',
-                      'Female',
-                      'Rather not say',
-                    ]
+                    items: ['Male', 'Female', 'Rather not say']
                         .map((gender) => DropdownMenuItem<String>(
                       value: gender,
                       child: Text(gender, style: theme.textTheme.bodySmall),
@@ -113,69 +154,18 @@ class SignUpView extends GetView<SignUpController> {
             ),
             const SizedBox(height: 20),
 
-            // Role Dropdown
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Role',
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                border: OutlineInputBorder(),
-              ),
-              value: controller.selectedRole.value,
-              onChanged: (newValue) {
-                controller.selectedRole.value = newValue!;
-              },
-              hint: Text('Select Role', style: theme.textTheme.bodySmall),
-              items: [
-                'Manager',
-                'Worker',
-              ]
-                  .map((role) => DropdownMenuItem<String>(
-                value: role,
-                child: Text(role, style: theme.textTheme.bodySmall),
-              ))
-                  .toList(),
-            ),
-            const SizedBox(height: 20),
-
-            // Select View Dropdown
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Select View',
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-                border: OutlineInputBorder(),
-              ),
-              value: controller.selectedView.value,
-              onChanged: (newValue) {
-                controller.selectedView.value = newValue!;
-              },
-              hint: Text('Select View', style: theme.textTheme.bodySmall),
-              items: [
-                'Vertical',
-                'Horizontal',
-              ]
-                  .map((view) => DropdownMenuItem<String>(
-                value: view,
-                child: Text(view, style: theme.textTheme.bodySmall),
-              ))
-                  .toList(),
-            ),
-            const SizedBox(height: 20),
-
-            // Select Services Label
+            // Services Checkboxes with Logging
             const Text(
               'Select Services',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-
-            // Checkboxes for Services
             Column(
               children: [
                 Obx(() => CheckboxListTile(
                   value: controller.meteorologicalPrediction.value,
                   onChanged: (bool? value) {
+                    logger.d("Meteorological Prediction selected: $value");
                     controller.meteorologicalPrediction.value = value!;
                   },
                   title: const Text("Meteorological prediction"),
@@ -183,6 +173,7 @@ class SignUpView extends GetView<SignUpController> {
                 Obx(() => CheckboxListTile(
                   value: controller.fieldManagement.value,
                   onChanged: (bool? value) {
+                    logger.d("Field Management selected: $value");
                     controller.fieldManagement.value = value!;
                   },
                   title: const Text("Field management"),
@@ -190,6 +181,7 @@ class SignUpView extends GetView<SignUpController> {
                 Obx(() => CheckboxListTile(
                   value: controller.userProtectionMeasurements.value,
                   onChanged: (bool? value) {
+                    logger.d("User Protection Measurements selected: $value");
                     controller.userProtectionMeasurements.value = value!;
                   },
                   title: const Text("User protection measurements"),
@@ -197,6 +189,7 @@ class SignUpView extends GetView<SignUpController> {
                 Obx(() => CheckboxListTile(
                   value: controller.biologicalData.value,
                   onChanged: (bool? value) {
+                    logger.d("Biological Data selected: $value");
                     controller.biologicalData.value = value!;
                   },
                   title: const Text("Biological data"),
@@ -204,6 +197,7 @@ class SignUpView extends GetView<SignUpController> {
                 Obx(() => CheckboxListTile(
                   value: controller.smartWatchConnection.value,
                   onChanged: (bool? value) {
+                    logger.d("Smartwatch Connection selected: $value");
                     controller.smartWatchConnection.value = value!;
                   },
                   title: const Text("Connection with smart watch"),
@@ -212,39 +206,24 @@ class SignUpView extends GetView<SignUpController> {
             ),
             const SizedBox(height: 20),
 
-            // Buttons for Deleting and Signing Up
+            // Buttons with Logging
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // "Delete All" Button with same style as "Sign Up"
                 ElevatedButton(
                   onPressed: () {
-                    // Clear all selections and inputs
+                    logger.i("Clear fields button clicked.");
                     controller.clearFields();
                   },
                   child: const Text('Delete All'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor, // Same color as "Get Started" button
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded corners
-                    ),
-                  ),
                 ),
-                SizedBox(width: 20.w), // Spacer
+                SizedBox(width: 20.w),
                 ElevatedButton(
-                  onPressed: controller.signUp,
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor, // Same color as "Get Started"
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  onPressed: () {
+                    logger.i("Sign-up button clicked.");
+                    controller.signUp();
+                  },
+                  child: const Text('Sign Up'),
                 ),
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:logger/logger.dart'; // Import the logger package
 
 import '../../../../config/translations/strings_enum.dart';
 import '../../../../utils/constants.dart';
@@ -13,12 +14,24 @@ import '../controllers/welcome_controller.dart';
 class WelcomeView extends GetView<WelcomeController> {
   const WelcomeView({Key? key}) : super(key: key);
 
+  // Initialize the logger
+  static final Logger logger = Logger();
+
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
+
+    logger.i("WelcomeView: Widget build started."); // Logging outside the widget tree
+
+    // Use addPostFrameCallback at the start of the build process
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      logger.i("WelcomeView: Initial frame rendered.");
+    });
+
     return Scaffold(
       body: Stack(
         children: [
+          // Background image
           Positioned.fill(
             child: Image.asset(Constants.welcome, fit: BoxFit.fill),
           ),
@@ -28,10 +41,10 @@ class WelcomeView extends GetView<WelcomeController> {
             left: 20.w,
             right: 20.w,
             child: Text(
-              'Helping Hand', // The label text
+              'Helping Hand',
               style: theme.textTheme.headlineMedium?.copyWith(
-                color: Colors.white, // Adjust the color
-                fontWeight: FontWeight.bold, // Adjust the font weight
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ).animate().fade().slideY(
@@ -85,7 +98,10 @@ class WelcomeView extends GetView<WelcomeController> {
                   ),
                   const Spacer(),
                   CustomButton(
-                    onPressed: () => Get.toNamed(Routes.HOME),  // Navigate to the login screen
+                    onPressed: () {
+                      logger.i("Get Started button clicked. Navigating to HOME.");
+                      Get.toNamed(Routes.HOME);
+                    },
                     text: Strings.getStarted.tr,
                     fontSize: 18.sp,
                     backgroundColor: theme.primaryColor,
@@ -101,7 +117,7 @@ class WelcomeView extends GetView<WelcomeController> {
                   20.verticalSpace,
                   GestureDetector(
                     onTap: () {
-                      // Navigate to the Login screen when "Login" word is tapped
+                      logger.i("Login link tapped. Navigating to LOGIN.");
                       Get.toNamed(Routes.LOGIN);
                     },
                     child: Text.rich(
@@ -114,7 +130,7 @@ class WelcomeView extends GetView<WelcomeController> {
                           TextSpan(
                             text: Strings.login.tr,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.primaryColor,  // Style for the "Login" text (link-like style)
+                              color: theme.primaryColor,
                             ),
                           ),
                         ],
@@ -134,7 +150,3 @@ class WelcomeView extends GetView<WelcomeController> {
     );
   }
 }
-
-
-
-

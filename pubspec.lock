@@ -268,10 +268,10 @@ packages:
     dependency: "direct main"
     description:
       name: http_mock_adapter
-      sha256: "46399c78bd4a0af071978edd8c502d7aeeed73b5fb9860bca86b5ed647a63c1b"
+      sha256: "991d1b9dcaa0ab3397aec31fce64bbb12e6a38bcc70b11335ef86cc2c61d33f2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.1"
+    version: "0.5.0"
   http_parser:
     dependency: transitive
     description:
@@ -372,10 +372,10 @@ packages:
     dependency: "direct main"
     description:
       name: logger
-      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
+      sha256: "7ad7215c15420a102ec687bb320a7312afd449bac63bfb1c60d9787c27b9767f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "1.4.0"
   lottie:
     dependency: "direct main"
     description:
